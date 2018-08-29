@@ -1,0 +1,127 @@
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Comp 425 Homework</title>
+    <link rel="stylesheet" href="../standard.css" type="text/css"/>
+    <script type="text/javascript" src="../outline.js"></script>
+    <script type="text/javascript" src="/gfoust/sh/scripts/shCore.js"></script>
+    <script type="text/javascript" src="/gfoust/sh/scripts/shBrushCpp.js"></script>
+    <script type="text/javascript">
+      SyntaxHighlighter.defaults.gutter = false;
+      SyntaxHighlighter.all();
+    </script>
+    <link type="text/css" rel="stylesheet" href="/gfoust/sh/styles/shCore.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="/gfoust/sh/styles/shThemeFoust.css"/>
+    <style>
+      ol > li { margin-bottom: 4em; }
+      p.think { font-style: italic; text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <ol>
+      <li>
+        Write a program named <code>discussion.cpp</code> in which
+        process <var>p</var> sends a message to process (<var>p</var> + 1)
+        % <var>N</var>, where <var>N</var> is the number of processes.  (The
+        message can be whatever you want.)  After <em>receiving</em> its
+        message, each process should print &ldquo;<code>Process <var>p</var>
+        received a message from process <var>q</var></code>,&rdquo;
+        where <var>p</var> is the id of the process and <var>q</var> is the id
+        of the process that sent the message.
+        <p>
+          Things to think about:
+        </p>
+        <ul class="half-spaced">
+          <li>Should a process try to send its message first, or recieve
+            first?</li>
+          <li>What would happen if every process tried to receive (or send)
+            at the same time?</li>
+          <li>How are the edge processes (i.e., 0 and <var>N</var>-1
+            where <var>N</var> is the number of processes) different?</li>
+          <li>What happens when the program is run in only one process?</li>
+          <li>
+            How can you maximize the amount of parallelism in this program?
+            That is, how can you have the greatest number of processes running
+            at the same time?
+          </li>
+        </ul>
+      </li>
+      <li>
+        In image processing, a <dfn>blur</dfn> effect can be created by
+        changing each pixel to be the average of itself and the pixels around
+        it.  We are going to blur an array of numbers in a similar way: each
+        number in the array will be replaced with the average of itself and
+        its surrounding numbers.
+        <p>
+          In order to limit the blurring effect, each number should be
+          weighted twice as heavily as the numbers surrounding it (e.g., count
+          it twice).  For example, suppose we have the following list of numbers:
+        </p>
+        <pre>
+4
+7
+2
+5
+</pre>
+        <p>
+          Blurring should give the following result:
+        </p>
+        <pre>
+(    4 + 4 + 7) / 3 = 5
+(4 + 7 + 7 + 2) / 4 = 5
+(7 + 2 + 2 + 5) / 4 = 4
+(2 + 5 + 5    ) / 3 = 4
+</pre>
+        <p>
+          Notice that each number is counted twice in calculating its average.
+          Also notice that the first and last numbers are the average of 3
+          numbers, not 4, because they are missing a surrounding number
+        </p>
+        <p>
+          Write a program named <code>blur.cpp</code>.
+        </p>
+        <ul class="half-spaced">
+          <li>
+            You must use double-precision floating point numbers
+            (i.e., <code>double</code>).  Note that the
+            constant <code>MPI_DOUBLE</code> is used to tell MPI you are
+            sending <code>double</code>s.
+          </li>
+          <li>Start by letting the user enter <var>N</var> numbers,
+            where <var>N</var> is the number of processes.</li>
+          <li>
+            Process 0 should send each other process its number, plus the one
+            before and after it.  (Except the last process which will only
+            have a number before, not after it.)
+            <div>
+              It is encouraged, though not required, that you store your
+              numbers in a vector and and send all three numbers in a single
+              call to <code>MPI_Send</code>; i.e., &ldquo;send three doubles
+              starting <em>here</em>.&rdquo;
+            </div>
+          </li>
+          <li>
+            Each process should calculate a new value for its number as the
+            average of itself and the numbers surrounding it.
+          </li>
+          <li>
+            Each other process should send its new number back to process 0.
+          </li>
+          <li>
+            Process 0 should print out all the numbers in order.
+          </li>
+        </ul>
+        <p>
+          Create at least three different test cases, each consisting of an
+          input/output file pair.  When the program is run with the input in
+          the input file, it should generate the output in the output file.
+          The first test case should use 4 processes; the other two should use
+          64 processes.  <em>Your first test case should be different than the one
+          shown above.</em>  Put some thought into the different scenarios you
+          should test for.
+        </p>
+      </li>
+    </ol>
+  </body>
+</html>
