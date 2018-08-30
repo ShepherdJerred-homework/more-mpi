@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(hello_mpi C)
+project(more_mpi C)
 
 set(CMAKE_C_STANDARD 90)
 
@@ -10,4 +10,5 @@ SET(CMAKE_C_COMPILER mpicc)
 SET(CMAKE_CXX_COMPILER mpicxx)
 
 set(SOURCE_FILES main.c)
-add_executable(hellompi avg_dist.c)
+add_executable(discussion src/discussion.c)
+add_executable(blur src/blur.c)
